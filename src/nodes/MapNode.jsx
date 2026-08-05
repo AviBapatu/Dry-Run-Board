@@ -26,7 +26,6 @@ export default function MapNode({ id, data, selected }) {
     border: '2px solid #2c2c2c',
     borderRadius: '4px',
     overflow: 'hidden',
-    boxShadow: '3px 3px 0px #2c2c2c',
   };
 
   const rowStyle = {
@@ -105,7 +104,7 @@ export default function MapNode({ id, data, selected }) {
 
   return (
     <div style={wrapperStyle}>
-      <div style={containerStyle}>
+      <div className="data-structure-container" style={containerStyle}>
         <div style={dragHandleStyle}>&#8943;</div>
         {entries.map((entry, idx) => (
           <div key={idx} style={idx === entries.length - 1 ? lastRowStyle : rowStyle}>

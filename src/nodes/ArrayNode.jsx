@@ -20,7 +20,6 @@ export default function ArrayNode({ id, data, selected }) {
     border: '2px solid #2c2c2c',
     borderRadius: '4px',
     overflow: 'hidden',
-    boxShadow: '3px 3px 0px #2c2c2c',
   };
 
   const cellStyle = {
@@ -96,7 +95,7 @@ export default function ArrayNode({ id, data, selected }) {
 
   return (
     <div style={wrapperStyle}>
-      <div style={containerStyle}>
+      <div className="data-structure-container" style={containerStyle}>
         <div style={dragHandleStyle}>&#8942;</div>
         {values.map((val, idx) => (
           <div key={idx} style={idx === values.length - 1 ? lastCellStyle : cellStyle}>

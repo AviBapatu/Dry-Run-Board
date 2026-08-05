@@ -21,7 +21,6 @@ export default function QueueNode({ id, data, selected }) {
     borderBottom: '2px solid #2c2c2c',
     borderLeft: 'none',
     borderRight: 'none',
-    boxShadow: '0px 3px 0px #2c2c2c',
   };
 
   const cellStyle = {
@@ -89,7 +88,7 @@ export default function QueueNode({ id, data, selected }) {
 
   return (
     <div style={wrapperStyle}>
-      <div style={containerStyle}>
+      <div className="data-structure-container" style={containerStyle}>
         <div style={dragHandleStyle}>&#8942;</div>
         {values.map((val, idx) => (
           <div key={idx} style={idx === values.length - 1 ? lastCellStyle : cellStyle}>

@@ -63,7 +63,6 @@ export default function MatrixNode({ id, data, selected }) {
     backgroundColor: '#f4f1ea',
     border: '2px solid #2c2c2c',
     borderRadius: '4px',
-    boxShadow: '3px 3px 0px #2c2c2c',
     overflow: 'hidden',
   };
 
@@ -174,7 +173,7 @@ export default function MatrixNode({ id, data, selected }) {
           ))}
         </div>
 
-        <div style={gridContainerStyle}>
+        <div className="data-structure-container" style={gridContainerStyle}>
           <div style={dragHandleStyle}>&#8943;</div>
           {grid.map((row, rIdx) => (
             <div key={rIdx} style={rIdx === grid.length - 1 ? lastRowStyle : rowStyle}>

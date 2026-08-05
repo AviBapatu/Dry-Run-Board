@@ -1,0 +1,48 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nicholasking/taurschema/master/tauri.schema.json",
+  "productName": "Dry Run Board",
+  "version": "1.0.0",
+  "identifier": "com.dryrunboard.app",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "title": "Dry Run Board",
+        "width": 1280,
+        "height": 800,
+        "resizable": true,
+        "fullscreen": false,
+        "decorations": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": [
+        "https://github.com/AviBapatu/Dry-Run-Board/releases/latest/download/latest.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDMzODI2REE1OEM4QzZEMTUKUldRVmJZeU1wVzJDTTd6bUx0S1IrRGpVQWpmaXhjSUpsUzRZMWdwd3l0MmFDVVhnT0VXYjk5U2EK"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["deb", "appimage"],
+    "icon": [
+      "icons/icon.png"
+    ],
+    "linux": {
+      "deb": {
+        "depends": ["libwebkit2gtk-4.1-0", "libgtk-3-0"]
+      }
+    }
+  }
+}

@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { ReactFlow, Background, Controls, useReactFlow } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { check } from '@tauri-apps/plugin-updater';
+import { ask } from '@tauri-apps/plugin-dialog';
+import { relaunch } from '@tauri-apps/plugin-process';
 
 import useStore from './store';
 import ArrayNode from './nodes/ArrayNode';
@@ -31,6 +34,33 @@ export default function App() {
   const onConnect = useStore((state) => state.onConnect);
   const selectNode = useStore((state) => state.selectNode);
   const { zoomIn, zoomOut, fitView } = useReactFlow();
+
+  useEffect(() => {
+    const checkForUpdates = async () => {
+      try {
+        const update = await check();
+        if (update) {
+          const yes = await ask(`Update to version ${update.version} is available!\n\nRelease notes: ${update.body}\n\nDo you want to install it?`, { 
+            title: 'Update Available', 
+            kind: 'info',
+            okLabel: 'Update',
+            cancelLabel: 'Cancel'
+          });
+          if (yes) {
+            await update.downloadAndInstall();
+            await relaunch();
+          }
+        }
+      } catch (e) {
+        console.error('Failed to check for updates:', e);
+      }
+    };
+    
+    // Only check for updates in Tauri environment (not web browser)
+    if (window.__TAURI_INTERNALS__) {
+      checkForUpdates();
+    }
+  }, []);
 
   useEffect(() => {
     const trackMouse = (e) => {

@@ -1,0 +1,23 @@
+[package]
+name = "dry-run-board"
+version = "1.0.0"
+description = "Visual dry-run board for data structures"
+authors = ["avi"]
+edition = "2021"
+
+[lib]
+name = "dry_run_board_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde_json = "1"
+serde = { version = "1", features = ["derive"] }
+tauri-plugin-dialog = "2"
+tauri-plugin-process = "2"
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-updater = "2"

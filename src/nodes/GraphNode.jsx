@@ -45,7 +45,6 @@ export default function GraphNode({ id, data }) {
     backgroundColor: '#f4f1ea',
     border: '2px solid #2c2c2c',
     borderRadius: '50%',
-    boxShadow: '3px 3px 0px #2c2c2c',
     position: 'relative',
   };
 
@@ -68,7 +67,7 @@ export default function GraphNode({ id, data }) {
   };
 
   return (
-    <div style={containerStyle}>
+    <div className="data-structure-container" style={containerStyle}>
       <Handle onClick={(e) => handleHandleClick(e, 'top', 'top-target', 'target')} type="target" position={Position.Top} id="top-target" style={handleStyle} />
       <Handle onClick={(e) => handleHandleClick(e, 'bottom', 'bottom-source', 'source')} type="source" position={Position.Bottom} id="bottom-source" style={handleStyle} />
       <Handle onClick={(e) => handleHandleClick(e, 'left', 'left-target', 'target')} type="target" position={Position.Left} id="left-target" style={handleStyle} />

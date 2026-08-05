@@ -25,3 +25,11 @@ html, body, #root {
 .react-flow__controls-button svg {
   fill: #2c2c2c !important;
 }
+
+.data-structure-container {
+  transition: box-shadow 0.2s ease;
+}
+
+.data-structure-container:hover {
+  box-shadow: 3px 3px 0px #2c2c2c !important;
+}
