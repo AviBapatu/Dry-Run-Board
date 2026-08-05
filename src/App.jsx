@@ -81,6 +81,7 @@ export default function App() {
           nodeTypes={nodeTypes}
           panOnScroll={true}
           zoomOnScroll={false}
+          proOptions={{ hideAttribution: true }}
           fitView
           fitViewOptions={{ maxZoom: 1.1, padding: 0.2 }}
         >
