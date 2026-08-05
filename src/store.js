@@ -66,26 +66,42 @@ const useStore = create(
     set({
       nodes: get().nodes.map((node) => {
         if (node.id === id) {
+          let pos = { ...node.position };
+          
           if (newDimensions.length !== undefined && node.data.entries) {
             const currentEntries = node.data.entries;
             const newLength = newDimensions.length;
+            const diff = newLength - currentEntries.length;
+            pos.y -= diff * 36;
+            
             const newEntries = Array.from({ length: newLength }, (_, i) => 
               i < currentEntries.length ? currentEntries[i] : { key: 'k', value: 'v' }
             );
-            return { ...node, data: { ...node.data, entries: newEntries } };
+            return { ...node, position: pos, data: { ...node.data, entries: newEntries } };
           }
           if (newDimensions.length !== undefined && node.data.values) {
             const currentValues = node.data.values;
             const newLength = newDimensions.length;
+            const diff = newLength - currentValues.length;
+            
+            if (node.type === 'stackNode') pos.y -= diff * 36;
+            else pos.x -= diff * 57;
+            
             const newValues = Array.from({ length: newLength }, (_, i) => 
               i < currentValues.length ? currentValues[i] : '0'
             );
-            return { ...node, data: { ...node.data, values: newValues } };
+            return { ...node, position: pos, data: { ...node.data, values: newValues } };
           }
           if (newDimensions.rows !== undefined && newDimensions.cols !== undefined && node.data.grid) {
             const currentGrid = node.data.grid;
             const newRows = newDimensions.rows;
             const newCols = newDimensions.cols;
+            const diffRows = newRows - currentGrid.length;
+            const diffCols = newCols - (currentGrid[0]?.length || 1);
+            
+            pos.y -= diffRows * 36;
+            pos.x -= diffCols * 57;
+            
             const newGrid = Array.from({ length: newRows }, (_, r) => 
               Array.from({ length: newCols }, (_, c) => {
                 if (r < currentGrid.length && c < currentGrid[r].length) {
@@ -94,7 +110,7 @@ const useStore = create(
                 return '0';
               })
             );
-            return { ...node, data: { ...node.data, grid: newGrid } };
+            return { ...node, position: pos, data: { ...node.data, grid: newGrid } };
           }
         }
         return node;
