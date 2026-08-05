@@ -3,7 +3,7 @@
   "short_name": "DryRun",
   "description": "Visual dry-run board for data structures — arrays, stacks, queues, maps, matrices, and graphs.",
   "start_url": "/",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#f4f1ea",
   "theme_color": "#2c2c2c",
   "icons": [
