@@ -1,0 +1,27 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow: hidden;
+  background-color: #f4f1ea;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Override default React Flow controls if needed for theme */
+.react-flow__controls-button {
+  background-color: #f4f1ea !important;
+  border-bottom: 1px solid #dcd7ca !important;
+}
+
+.react-flow__controls-button:last-child {
+  border-bottom: none !important;
+}
+
+.react-flow__controls-button svg {
+  fill: #2c2c2c !important;
+}
