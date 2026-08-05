@@ -76,7 +76,7 @@ export default function ControlPanel() {
       <button style={buttonStyle} onClick={() => spawnNode('0', getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Graph Node [G]</button>
       
       <div style={{ height: '1px', backgroundColor: '#dcd7ca', margin: '4px 0' }} />
-      <button style={clearStyle} onClick={() => clearCanvas()} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e, '#d60000')} onMouseLeave={e => handleMouseup(e, '#d60000')}>Clear Canvas</button>
+      <button style={clearStyle} onClick={() => clearCanvas()} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e, '#d60000')} onMouseLeave={e => handleMouseup(e, '#d60000')}>Clear Canvas [⇧+ C]</button>
     </div>
   );
 }

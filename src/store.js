@@ -2,6 +2,33 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { applyNodeChanges, applyEdgeChanges, addEdge } from '@xyflow/react';
 
+const getDims = (node) => {
+  if (node.measured && node.measured.width) {
+    return { w: node.measured.width, h: node.measured.height };
+  }
+  if (node.width) {
+    return { w: node.width, h: node.height };
+  }
+  return { w: 100, h: 100 };
+};
+
+const isOverlapping = (nodeA, nodeB) => {
+  const dimA = getDims(nodeA);
+  const dimB = getDims(nodeB);
+  
+  const a = { x: nodeA.position.x, y: nodeA.position.y, w: dimA.w, h: dimA.h };
+  const b = { x: nodeB.position.x, y: nodeB.position.y, w: dimB.w, h: dimB.h };
+  
+  const buffer = 10;
+  
+  return (
+    a.x < b.x + b.w + buffer &&
+    a.x + a.w + buffer > b.x &&
+    a.y < b.y + b.h + buffer &&
+    a.y + a.h + buffer > b.y
+  );
+};
+
 const useStore = create(
   persist(
     (set, get) => ({
@@ -129,9 +156,44 @@ const useStore = create(
   
   onNodesChange: (changes) => {
     if (changes.some(c => c.type === 'remove')) get().saveHistory();
-    set({
-      nodes: applyNodeChanges(changes, get().nodes),
-    });
+    
+    const nextNodes = applyNodeChanges(changes, get().nodes);
+    
+    const positionChanges = changes.filter(c => c.type === 'position' && c.position);
+    if (positionChanges.length > 0) {
+      let hasNewCollision = false;
+      const movedNodeIds = new Set(positionChanges.map(c => c.id));
+      
+      for (const nodeId of movedNodeIds) {
+        const movedNodeNext = nextNodes.find(n => n.id === nodeId);
+        const movedNodePrev = get().nodes.find(n => n.id === nodeId);
+        if (!movedNodeNext || !movedNodePrev) continue;
+        
+        for (const otherNode of nextNodes) {
+          if (otherNode.id === nodeId) continue;
+          
+          const isCollidingNow = isOverlapping(movedNodeNext, otherNode);
+          if (isCollidingNow) {
+            const otherNodePrev = get().nodes.find(n => n.id === otherNode.id);
+            const wasCollidingBefore = otherNodePrev ? isOverlapping(movedNodePrev, otherNodePrev) : false;
+            
+            if (!wasCollidingBefore) {
+              hasNewCollision = true;
+              break;
+            }
+          }
+        }
+        if (hasNewCollision) break;
+      }
+      
+      if (hasNewCollision) {
+        const nonPosChanges = changes.filter(c => c.type !== 'position' || !c.position);
+        set({ nodes: applyNodeChanges(nonPosChanges, get().nodes) });
+        return;
+      }
+    }
+    
+    set({ nodes: nextNodes });
   },
   
   onEdgesChange: (changes) => {
@@ -204,6 +266,7 @@ const useStore = create(
     }),
     {
       name: 'dry-run-board-storage',
+      partialize: (state) => ({ nodes: state.nodes, edges: state.edges }),
     }
   )
 );

@@ -28,22 +28,10 @@ const NumberInput = ({ label, value, onChange, min, max }) => {
 };
 
 export default function PropertiesPanel() {
-  const [selectedNodeId, setSelectedNodeId] = useState(null);
-  
-  useOnSelectionChange({
-    onChange: ({ nodes }) => {
-      if (nodes.length === 1) {
-        setSelectedNodeId(nodes[0].id);
-      } else {
-        setSelectedNodeId(null);
-      }
-    },
-  });
-
   const nodes = useStore((state) => state.nodes);
   const updateNodeStructure = useStore((state) => state.updateNodeStructure);
 
-  const selectedNode = nodes.find(n => n.id === selectedNodeId);
+  const selectedNode = nodes.find(n => n.selected);
 
   if (!selectedNode) return null;
 

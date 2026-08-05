@@ -30,7 +30,7 @@ export default function App() {
   const onEdgesChange = useStore((state) => state.onEdgesChange);
   const onConnect = useStore((state) => state.onConnect);
   const selectNode = useStore((state) => state.selectNode);
-  const { zoomIn, zoomOut } = useReactFlow();
+  const { zoomIn, zoomOut, fitView } = useReactFlow();
 
   useEffect(() => {
     const trackMouse = (e) => {
@@ -43,6 +43,9 @@ export default function App() {
           e.preventDefault();
           if (e.key === '-') zoomOut();
           else zoomIn();
+        } else if (e.key === '0') {
+          e.preventDefault();
+          fitView({ maxZoom: 1, padding: 0.2 });
         } else if (e.key.toLowerCase() === 'z') {
           e.preventDefault();
           if (e.shiftKey) useStore.getState().redo();
@@ -79,6 +82,7 @@ export default function App() {
           panOnScroll={true}
           zoomOnScroll={false}
           fitView
+          fitViewOptions={{ maxZoom: 1.1, padding: 0.2 }}
         >
           <Background variant="dots" color="#dcd7ca" gap={16} size={1.5} />
           <Controls style={{ boxShadow: '2px 2px 0px #2c2c2c', border: '2px solid #2c2c2c', borderRadius: '0', backgroundColor: '#f4f1ea' }} />

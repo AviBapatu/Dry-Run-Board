@@ -46,6 +46,7 @@ export default function GraphNode({ id, data }) {
     border: '2px solid #2c2c2c',
     borderRadius: '50%',
     boxShadow: '3px 3px 0px #2c2c2c',
+    position: 'relative',
   };
 
   const inputStyle = {
