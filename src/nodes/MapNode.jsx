@@ -116,7 +116,7 @@ export default function MapNode({ id, data, selected }) {
                 style={inputStyle} 
                 value={entry.key} 
                 onChange={(e) => handleKeyChange(idx, e.target.value)} 
-                onFocus={(e) => e.target.select()}
+                onFocus={(e) => { useStore.getState().saveHistory(); e.target.select(); }}
               />
             </div>
             <div style={cellStyle}>
@@ -125,7 +125,7 @@ export default function MapNode({ id, data, selected }) {
                 style={inputStyle} 
                 value={entry.value} 
                 onChange={(e) => handleValueChange(idx, e.target.value)} 
-                onFocus={(e) => e.target.select()}
+                onFocus={(e) => { useStore.getState().saveHistory(); e.target.select(); }}
               />
             </div>
             <Handle type="source" position={Position.Right} id={`source-${idx}`} style={{ ...handleStyle, right: -4 }} />

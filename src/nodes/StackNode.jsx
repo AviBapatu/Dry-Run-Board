@@ -99,7 +99,7 @@ export default function StackNode({ id, data, selected }) {
               style={inputStyle} 
               value={val} 
               onChange={(e) => handleValueChange(idx, e.target.value)} 
-              onFocus={(e) => e.target.select()}
+              onFocus={(e) => { useStore.getState().saveHistory(); e.target.select(); }}
             />
             <Handle type="source" position={Position.Right} id={`source-${idx}`} style={{ ...invisibleHandleStyle, right: 0 }} />
           </div>

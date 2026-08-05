@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ReactFlow, Background, Controls } from '@xyflow/react';
+import { ReactFlow, Background, Controls, useReactFlow } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
 import useStore from './store';
@@ -30,14 +30,34 @@ export default function App() {
   const onEdgesChange = useStore((state) => state.onEdgesChange);
   const onConnect = useStore((state) => state.onConnect);
   const selectNode = useStore((state) => state.selectNode);
+  const { zoomIn, zoomOut } = useReactFlow();
 
   useEffect(() => {
     const trackMouse = (e) => {
       window.lastMousePos = { x: e.clientX, y: e.clientY };
     };
+    
+    const handleGlobalKeydown = (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        if (e.key === '=' || e.key === '+' || e.key === '-') {
+          e.preventDefault();
+          if (e.key === '-') zoomOut();
+          else zoomIn();
+        } else if (e.key.toLowerCase() === 'z') {
+          e.preventDefault();
+          if (e.shiftKey) useStore.getState().redo();
+          else useStore.getState().undo();
+        }
+      }
+    };
+
     window.addEventListener('mousemove', trackMouse);
-    return () => window.removeEventListener('mousemove', trackMouse);
-  }, []);
+    window.addEventListener('keydown', handleGlobalKeydown, { passive: false });
+    return () => {
+      window.removeEventListener('mousemove', trackMouse);
+      window.removeEventListener('keydown', handleGlobalKeydown);
+    };
+  }, [zoomIn, zoomOut]);
 
   useKeyboardShortcuts();
 
@@ -54,7 +74,10 @@ export default function App() {
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           onNodeMouseEnter={onNodeMouseEnter}
+          onNodeDragStart={() => useStore.getState().saveHistory()}
           nodeTypes={nodeTypes}
+          panOnScroll={true}
+          zoomOnScroll={false}
           fitView
         >
           <Background variant="dots" color="#dcd7ca" gap={16} size={1.5} />

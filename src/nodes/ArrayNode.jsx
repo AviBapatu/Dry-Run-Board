@@ -112,7 +112,7 @@ export default function ArrayNode({ id, data, selected }) {
               style={inputStyle} 
               value={val} 
               onChange={(e) => handleValueChange(idx, e.target.value)} 
-              onFocus={(e) => e.target.select()}
+              onFocus={(e) => { useStore.getState().saveHistory(); e.target.select(); }}
             />
             <Handle 
               type="source" 

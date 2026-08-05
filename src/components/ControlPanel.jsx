@@ -71,7 +71,7 @@ export default function ControlPanel() {
       <button style={buttonStyle} onClick={() => spawnArray(['0','0','0','0'], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Array [A]</button>
       <button style={buttonStyle} onClick={() => spawnStack(['0','0','0','0'], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Stack [S]</button>
       <button style={buttonStyle} onClick={() => spawnQueue(['0','0','0','0'], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Queue [Q]</button>
-      <button style={buttonStyle} onClick={() => spawnMap([{key:'k1',value:'v1'},{key:'k2',value:'v2'}], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Map [M]</button>
+      <button style={buttonStyle} onClick={() => spawnMap([{key:'k',value:'v'}], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Map [M]</button>
       <button style={buttonStyle} onClick={() => spawnMatrix([['0','0','0'],['0','0','0'],['0','0','0']], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Matrix [X]</button>
       <button style={buttonStyle} onClick={() => spawnNode('0', getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Graph Node [G]</button>
       

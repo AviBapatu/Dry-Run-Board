@@ -99,7 +99,7 @@ export default function QueueNode({ id, data, selected }) {
               style={inputStyle} 
               value={val} 
               onChange={(e) => handleValueChange(idx, e.target.value)} 
-              onFocus={(e) => e.target.select()}
+              onFocus={(e) => { useStore.getState().saveHistory(); e.target.select(); }}
             />
             <Handle type="source" position={Position.Bottom} id={`source-${idx}`} style={{ ...handleStyle, bottom: -4 }} />
           </div>

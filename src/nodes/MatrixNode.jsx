@@ -191,7 +191,7 @@ export default function MatrixNode({ id, data, selected }) {
                     style={inputStyle}
                     value={val}
                     onChange={(e) => handleValueChange(rIdx, cIdx, e.target.value)}
-                    onFocus={(e) => e.target.select()}
+                    onFocus={(e) => { useStore.getState().saveHistory(); e.target.select(); }}
                   />
                   <Handle
                     type="source"

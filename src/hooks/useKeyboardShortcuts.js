@@ -36,7 +36,7 @@ export default function useKeyboardShortcuts() {
           spawnStack(['0', '0', '0', '0'], position);
           break;
         case 'm':
-          spawnMap([{ key: 'k1', value: 'v1' }, { key: 'k2', value: 'v2' }], position);
+          spawnMap([{ key: 'k', value: 'v' }], position);
           break;
         case 'x':
           spawnMatrix([
@@ -49,7 +49,7 @@ export default function useKeyboardShortcuts() {
           spawnNode('0', position);
           break;
         case 'c':
-          if (e.ctrlKey || e.metaKey || e.altKey) {
+          if (e.shiftKey && !e.ctrlKey && !e.metaKey && !e.altKey) {
             clearCanvas();
           }
           break;

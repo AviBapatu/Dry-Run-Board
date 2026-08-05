@@ -7,8 +7,48 @@ const useStore = create(
     (set, get) => ({
       nodes: [],
       edges: [],
+      past: [],
+      future: [],
       
-      clearCanvas: () => set({ nodes: [], edges: [] }),
+      saveHistory: () => {
+        set((state) => {
+          const newPast = [...state.past, { nodes: state.nodes, edges: state.edges }].slice(-50);
+          return { past: newPast, future: [] };
+        });
+      },
+      
+      undo: () => {
+        set((state) => {
+          if (state.past.length === 0) return state;
+          const previous = state.past[state.past.length - 1];
+          const newPast = state.past.slice(0, state.past.length - 1);
+          return {
+            past: newPast,
+            future: [{ nodes: state.nodes, edges: state.edges }, ...state.future],
+            nodes: previous.nodes,
+            edges: previous.edges,
+          };
+        });
+      },
+    
+      redo: () => {
+        set((state) => {
+          if (state.future.length === 0) return state;
+          const next = state.future[0];
+          const newFuture = state.future.slice(1);
+          return {
+            past: [...state.past, { nodes: state.nodes, edges: state.edges }],
+            future: newFuture,
+            nodes: next.nodes,
+            edges: next.edges,
+          };
+        });
+      },
+
+      clearCanvas: () => {
+        get().saveHistory();
+        set({ nodes: [], edges: [] });
+      },
   
   updateNodeData: (nodeId, dataUpdate) => {
     set({
@@ -22,6 +62,7 @@ const useStore = create(
   },
 
   updateNodeStructure: (id, newDimensions) => {
+    get().saveHistory();
     set({
       nodes: get().nodes.map((node) => {
         if (node.id === id) {
@@ -71,24 +112,28 @@ const useStore = create(
   },
   
   onNodesChange: (changes) => {
+    if (changes.some(c => c.type === 'remove')) get().saveHistory();
     set({
       nodes: applyNodeChanges(changes, get().nodes),
     });
   },
   
   onEdgesChange: (changes) => {
+    if (changes.some(c => c.type === 'remove')) get().saveHistory();
     set({
       edges: applyEdgeChanges(changes, get().edges),
     });
   },
   
   onConnect: (connection) => {
+    get().saveHistory();
     set({
       edges: addEdge(connection, get().edges),
     });
   },
   
   spawnArray: (values, pos) => {
+    get().saveHistory();
     const id = `array-${Math.random().toString(36).substring(2, 11)}`;
     const position = pos || { x: 100 + Math.floor(Math.random() * 50), y: 100 + Math.floor(Math.random() * 50) };
     const newNode = { id, type: 'arrayNode', position, data: { values } };
@@ -96,6 +141,7 @@ const useStore = create(
   },
   
   spawnMatrix: (grid, pos) => {
+    get().saveHistory();
     const id = `matrix-${Math.random().toString(36).substring(2, 11)}`;
     const position = pos || { x: 100 + Math.floor(Math.random() * 50), y: 100 + Math.floor(Math.random() * 50) };
     const newNode = { id, type: 'matrixNode', position, data: { grid } };
@@ -103,13 +149,21 @@ const useStore = create(
   },
   
   spawnNode: (value, pos) => {
+    get().saveHistory();
     const id = `node-${Math.random().toString(36).substring(2, 11)}`;
     const position = pos || { x: 100 + Math.floor(Math.random() * 50), y: 100 + Math.floor(Math.random() * 50) };
     const newNode = { id, type: 'graphNode', position, data: { value } };
     set({ nodes: [...get().nodes, newNode] });
+    return id;
+  },
+
+  addManualEdge: (source, target, sourceHandle, targetHandle) => {
+    const id = `e-${source}-${target}-${Math.random().toString(36).substring(2,6)}`;
+    set({ edges: [...get().edges, { id, source, target, sourceHandle, targetHandle }] });
   },
 
   spawnStack: (values, pos) => {
+    get().saveHistory();
     const id = `stack-${Math.random().toString(36).substring(2, 11)}`;
     const position = pos || { x: 100 + Math.floor(Math.random() * 50), y: 100 + Math.floor(Math.random() * 50) };
     const newNode = { id, type: 'stackNode', position, data: { values } };
@@ -117,6 +171,7 @@ const useStore = create(
   },
 
   spawnQueue: (values, pos) => {
+    get().saveHistory();
     const id = `queue-${Math.random().toString(36).substring(2, 11)}`;
     const position = pos || { x: 100 + Math.floor(Math.random() * 50), y: 100 + Math.floor(Math.random() * 50) };
     const newNode = { id, type: 'queueNode', position, data: { values } };
@@ -124,6 +179,7 @@ const useStore = create(
   },
 
   spawnMap: (entries, pos) => {
+    get().saveHistory();
     const id = `map-${Math.random().toString(36).substring(2, 11)}`;
     const position = pos || { x: 100 + Math.floor(Math.random() * 50), y: 100 + Math.floor(Math.random() * 50) };
     const newNode = { id, type: 'mapNode', position, data: { entries } };
