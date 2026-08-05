@@ -1,7 +1,9 @@
 import React from 'react';
+import { useReactFlow } from '@xyflow/react';
 import useStore from '../store';
 
 export default function ControlPanel() {
+  const { screenToFlowPosition } = useReactFlow();
   const spawnArray = useStore((state) => state.spawnArray);
   const spawnMatrix = useStore((state) => state.spawnMatrix);
   const spawnNode = useStore((state) => state.spawnNode);
@@ -9,6 +11,8 @@ export default function ControlPanel() {
   const spawnQueue = useStore((state) => state.spawnQueue);
   const spawnMap = useStore((state) => state.spawnMap);
   const clearCanvas = useStore((state) => state.clearCanvas);
+
+  const getPos = () => window.lastMousePos ? screenToFlowPosition(window.lastMousePos) : undefined;
 
   const panelStyle = {
     position: 'absolute',
@@ -64,12 +68,12 @@ export default function ControlPanel() {
       </h3>
       <div style={{ height: '1px', backgroundColor: '#dcd7ca', marginBottom: '8px' }} />
       
-      <button style={buttonStyle} onClick={() => spawnArray(['0','0','0','0'])} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Array [A]</button>
-      <button style={buttonStyle} onClick={() => spawnQueue(['0','0','0','0'])} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Queue [Q]</button>
-      <button style={buttonStyle} onClick={() => spawnStack(['0','0','0','0'])} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Stack [S]</button>
-      <button style={buttonStyle} onClick={() => spawnMap([{key:'k1',value:'v1'},{key:'k2',value:'v2'}])} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Map [M]</button>
-      <button style={buttonStyle} onClick={() => spawnMatrix([['0','0','0'],['0','0','0'],['0','0','0']])} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Matrix [X]</button>
-      <button style={buttonStyle} onClick={() => spawnNode('A')} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Graph Node [G]</button>
+      <button style={buttonStyle} onClick={() => spawnArray(['0','0','0','0'], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Array [A]</button>
+      <button style={buttonStyle} onClick={() => spawnStack(['0','0','0','0'], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Stack [S]</button>
+      <button style={buttonStyle} onClick={() => spawnQueue(['0','0','0','0'], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Queue [Q]</button>
+      <button style={buttonStyle} onClick={() => spawnMap([{key:'k1',value:'v1'},{key:'k2',value:'v2'}], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Map [M]</button>
+      <button style={buttonStyle} onClick={() => spawnMatrix([['0','0','0'],['0','0','0'],['0','0','0']], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Matrix [X]</button>
+      <button style={buttonStyle} onClick={() => spawnNode('0', getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Graph Node [G]</button>
       
       <div style={{ height: '1px', backgroundColor: '#dcd7ca', margin: '4px 0' }} />
       <button style={clearStyle} onClick={() => clearCanvas()} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e, '#d60000')} onMouseLeave={e => handleMouseup(e, '#d60000')}>Clear Canvas</button>

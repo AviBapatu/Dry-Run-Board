@@ -51,6 +51,7 @@ export default function GraphNode({ id, data }) {
         style={inputStyle} 
         value={data.value} 
         onChange={handleValueChange} 
+        onFocus={(e) => e.target.select()}
       />
     </div>
   );

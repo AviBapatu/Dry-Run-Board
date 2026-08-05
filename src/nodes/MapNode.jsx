@@ -2,8 +2,9 @@ import React from 'react';
 import { Handle, Position } from '@xyflow/react';
 import useStore from '../store';
 
-export default function MapNode({ id, data }) {
+export default function MapNode({ id, data, selected }) {
   const updateNodeData = useStore((state) => state.updateNodeData);
+  const updateNodeStructure = useStore((state) => state.updateNodeStructure);
   const entries = data.entries || [];
 
   const handleKeyChange = (idx, newKey) => {
@@ -71,30 +72,72 @@ export default function MapNode({ id, data }) {
     height: '8px',
   };
 
+  const dragHandleStyle = {
+    height: '16px',
+    backgroundColor: '#dcd7ca',
+    borderBottom: '1px solid #2c2c2c',
+    cursor: 'grab',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '14px',
+    color: '#666',
+    lineHeight: '10px',
+  };
+
+  const wrapperStyle = { position: 'relative' };
+  
+  const btnContainerStyle = {
+    position: 'absolute',
+    bottom: '-32px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '6px',
+  };
+
+  const btnStyle = {
+    backgroundColor: '#f4f1ea', border: '2px solid #2c2c2c', color: '#2c2c2c', cursor: 'pointer',
+    fontWeight: 'bold', width: '22px', height: '22px', display: 'flex', alignItems: 'center',
+    justifyContent: 'center', fontSize: '14px', boxShadow: '2px 2px 0px #2c2c2c', padding: 0,
+  };
+
   return (
-    <div style={containerStyle}>
-      {entries.map((entry, idx) => (
-        <div key={idx} style={idx === entries.length - 1 ? lastRowStyle : rowStyle}>
-          <Handle type="target" position={Position.Left} id={`target-${idx}`} style={{ ...handleStyle, left: -4 }} />
-          <div style={keyCellStyle}>
-            <input 
-              className="nodrag"
-              style={inputStyle} 
-              value={entry.key} 
-              onChange={(e) => handleKeyChange(idx, e.target.value)} 
-            />
+    <div style={wrapperStyle}>
+      <div style={containerStyle}>
+        <div style={dragHandleStyle}>&#8943;</div>
+        {entries.map((entry, idx) => (
+          <div key={idx} style={idx === entries.length - 1 ? lastRowStyle : rowStyle}>
+            <Handle type="target" position={Position.Left} id={`target-${idx}`} style={{ ...handleStyle, left: -4 }} />
+            <div style={keyCellStyle}>
+              <input 
+                className="nodrag"
+                style={inputStyle} 
+                value={entry.key} 
+                onChange={(e) => handleKeyChange(idx, e.target.value)} 
+                onFocus={(e) => e.target.select()}
+              />
+            </div>
+            <div style={cellStyle}>
+              <input 
+                className="nodrag"
+                style={inputStyle} 
+                value={entry.value} 
+                onChange={(e) => handleValueChange(idx, e.target.value)} 
+                onFocus={(e) => e.target.select()}
+              />
+            </div>
+            <Handle type="source" position={Position.Right} id={`source-${idx}`} style={{ ...handleStyle, right: -4 }} />
           </div>
-          <div style={cellStyle}>
-            <input 
-              className="nodrag"
-              style={inputStyle} 
-              value={entry.value} 
-              onChange={(e) => handleValueChange(idx, e.target.value)} 
-            />
-          </div>
-          <Handle type="source" position={Position.Right} id={`source-${idx}`} style={{ ...handleStyle, right: -4 }} />
+        ))}
+      </div>
+      {selected && (
+        <div style={btnContainerStyle}>
+          <button style={btnStyle} onClick={() => updateNodeStructure(id, { length: entries.length + 1 })}>+</button>
+          <button style={btnStyle} onClick={() => updateNodeStructure(id, { length: Math.max(1, entries.length - 1) })}>-</button>
         </div>
-      ))}
+      )}
     </div>
   );
 }
