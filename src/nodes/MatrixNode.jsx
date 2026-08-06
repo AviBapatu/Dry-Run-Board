@@ -63,7 +63,7 @@ export default function MatrixNode({ id, data, selected }) {
     backgroundColor: '#f4f1ea',
     border: '2px solid #2c2c2c',
     borderRadius: '4px',
-    overflow: 'hidden',
+    overflow: 'visible',
   };
 
   const rowStyle = {
@@ -174,7 +174,10 @@ export default function MatrixNode({ id, data, selected }) {
         </div>
 
         <div className="data-structure-container" style={gridContainerStyle}>
-          <div style={dragHandleStyle}>&#8943;</div>
+          <div style={{ ...dragHandleStyle, position: 'relative' }}>
+            <Handle type="source" position={Position.Top} id="drag-handle-top" style={{ top: '-8px', width: '16px', height: '16px', background: '#2c2c2c', border: '2px solid #f4f1ea' }} />
+            &#8943;
+          </div>
           {grid.map((row, rIdx) => (
             <div key={rIdx} style={rIdx === grid.length - 1 ? lastRowStyle : rowStyle}>
               {row.map((val, cIdx) => (

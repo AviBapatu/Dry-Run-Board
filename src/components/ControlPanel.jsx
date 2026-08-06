@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useReactFlow } from '@xyflow/react';
 import useStore from '../store';
 
 export default function ControlPanel() {
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const { screenToFlowPosition } = useReactFlow();
   const spawnArray = useStore((state) => state.spawnArray);
   const spawnMatrix = useStore((state) => state.spawnMatrix);
@@ -25,7 +26,7 @@ export default function ControlPanel() {
     padding: '16px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '12px',
+    gap: isCollapsed ? '0px' : '12px',
     boxShadow: '4px 4px 0px #2c2c2c',
     borderRadius: '0', 
   };
@@ -64,21 +65,34 @@ export default function ControlPanel() {
 
   return (
     <div style={panelStyle}>
-      <h3 style={{ margin: '0 0 4px 0', fontSize: '18px', color: '#2c2c2c', textTransform: 'uppercase', letterSpacing: '1px' }}>
-        Dry Run Tools
-      </h3>
-      <div style={{ height: '1px', backgroundColor: '#dcd7ca', marginBottom: '8px' }} />
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h3 style={{ margin: 0, fontSize: '18px', color: '#2c2c2c', textTransform: 'uppercase', letterSpacing: '1px', paddingRight: '16px' }}>
+          Dry Run Tools
+        </h3>
+        <button 
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', fontWeight: 'bold', color: '#2c2c2c', padding: '0 4px' }}
+        >
+          {isCollapsed ? '+' : '−'}
+        </button>
+      </div>
       
-      <button style={buttonStyle} onClick={() => spawnArray(['0','0','0','0'], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Array [A]</button>
-      <button style={buttonStyle} onClick={() => spawnStack(['0','0','0','0'], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Stack [S]</button>
-      <button style={buttonStyle} onClick={() => spawnQueue(['0','0','0','0'], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Queue [Q]</button>
-      <button style={buttonStyle} onClick={() => spawnMap([{key:'k',value:'v'}], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Map [M]</button>
-      <button style={buttonStyle} onClick={() => spawnMatrix([['0','0','0'],['0','0','0'],['0','0','0']], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Matrix [X]</button>
-      <button style={buttonStyle} onClick={() => spawnNode('0', getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Graph Node [G]</button>
-      <button style={buttonStyle} onClick={() => spawnText('', getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Text Note [T]</button>
-      
-      <div style={{ height: '1px', backgroundColor: '#dcd7ca', margin: '4px 0' }} />
-      <button style={clearStyle} onClick={() => clearCanvas()} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e, '#d60000')} onMouseLeave={e => handleMouseup(e, '#d60000')}>Clear Canvas [⇧+ C]</button>
+      {!isCollapsed && (
+        <>
+          <div style={{ height: '1px', backgroundColor: '#dcd7ca', marginTop: '4px', marginBottom: '8px' }} />
+          
+          <button style={buttonStyle} onClick={() => spawnArray(['0','0','0','0'], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Array [A]</button>
+          <button style={buttonStyle} onClick={() => spawnStack(['0','0','0','0'], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Stack [S]</button>
+          <button style={buttonStyle} onClick={() => spawnQueue(['0','0','0','0'], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Queue [Q]</button>
+          <button style={buttonStyle} onClick={() => spawnMap([{key:'k',value:'v'}], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Map [M]</button>
+          <button style={buttonStyle} onClick={() => spawnMatrix([['0','0','0'],['0','0','0'],['0','0','0']], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Matrix [X]</button>
+          <button style={buttonStyle} onClick={() => spawnNode('0', getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Graph Node [G]</button>
+          <button style={buttonStyle} onClick={() => spawnText('', getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Text Note [T]</button>
+          
+          <div style={{ height: '1px', backgroundColor: '#dcd7ca', margin: '4px 0' }} />
+          <button style={clearStyle} onClick={() => clearCanvas()} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e, '#d60000')} onMouseLeave={e => handleMouseup(e, '#d60000')}>Clear Canvas [⇧+ C]</button>
+        </>
+      )}
     </div>
   );
 }

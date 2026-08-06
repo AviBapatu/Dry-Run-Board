@@ -30,6 +30,7 @@ const NumberInput = ({ label, value, onChange, min, max }) => {
 export default function PropertiesPanel() {
   const nodes = useStore((state) => state.nodes);
   const updateNodeStructure = useStore((state) => state.updateNodeStructure);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const selectedNode = nodes.find(n => n.selected);
 
@@ -45,7 +46,7 @@ export default function PropertiesPanel() {
     padding: '16px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '12px',
+    gap: isCollapsed ? '0px' : '12px',
     boxShadow: '4px 4px 0px #2c2c2c',
     borderRadius: '0',
     minWidth: '200px',
@@ -63,48 +64,61 @@ export default function PropertiesPanel() {
 
   return (
     <div style={panelStyle}>
-      <h3 style={{ margin: '0 0 4px 0', fontSize: '16px', color: '#2c2c2c', textTransform: 'uppercase', letterSpacing: '1px' }}>
-        {title}
-      </h3>
-      <div style={{ height: '1px', backgroundColor: '#dcd7ca', marginBottom: '8px' }} />
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h3 style={{ margin: 0, fontSize: '16px', color: '#2c2c2c', textTransform: 'uppercase', letterSpacing: '1px', paddingRight: '16px' }}>
+          {title}
+        </h3>
+        <button 
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', fontWeight: 'bold', color: '#2c2c2c', padding: '0 4px' }}
+        >
+          {isCollapsed ? '+' : '−'}
+        </button>
+      </div>
 
-      {isArrayLike && (
-        <NumberInput 
-          label="Length" 
-          value={currentLength} 
-          min={1} 
-          max={20} 
-          onChange={(newLen) => updateNodeStructure(selectedNode.id, { length: newLen })} 
-        />
-      )}
-
-      {isMatrix && (
+      {!isCollapsed && (
         <>
-          <NumberInput 
-            label="Rows" 
-            value={selectedNode.data.grid?.length || 0} 
-            min={1} 
-            max={10} 
-            onChange={(newRows) => {
-              const currentCols = selectedNode.data.grid?.[0]?.length || 1;
-              updateNodeStructure(selectedNode.id, { rows: newRows, cols: currentCols });
-            }} 
-          />
-          <NumberInput 
-            label="Cols" 
-            value={selectedNode.data.grid?.[0]?.length || 0} 
-            min={1} 
-            max={10} 
-            onChange={(newCols) => {
-              const currentRows = selectedNode.data.grid?.length || 1;
-              updateNodeStructure(selectedNode.id, { rows: currentRows, cols: newCols });
-            }} 
-          />
-        </>
-      )}
+          <div style={{ height: '1px', backgroundColor: '#dcd7ca', marginTop: '4px', marginBottom: '8px' }} />
 
-      {!isArrayLike && !isMatrix && (
-        <div style={{ fontSize: '12px', color: '#666' }}>No structural properties to edit.</div>
+          {isArrayLike && (
+            <NumberInput 
+              label="Length" 
+              value={currentLength} 
+              min={1} 
+              max={20} 
+              onChange={(newLen) => updateNodeStructure(selectedNode.id, { length: newLen })} 
+            />
+          )}
+
+          {isMatrix && (
+            <>
+              <NumberInput 
+                label="Rows" 
+                value={selectedNode.data.grid?.length || 0} 
+                min={1} 
+                max={10} 
+                onChange={(newRows) => {
+                  const currentCols = selectedNode.data.grid?.[0]?.length || 1;
+                  updateNodeStructure(selectedNode.id, { rows: newRows, cols: currentCols });
+                }} 
+              />
+              <NumberInput 
+                label="Cols" 
+                value={selectedNode.data.grid?.[0]?.length || 0} 
+                min={1} 
+                max={10} 
+                onChange={(newCols) => {
+                  const currentRows = selectedNode.data.grid?.length || 1;
+                  updateNodeStructure(selectedNode.id, { rows: currentRows, cols: newCols });
+                }} 
+              />
+            </>
+          )}
+
+          {!isArrayLike && !isMatrix && (
+            <div style={{ fontSize: '12px', color: '#666' }}>No structural properties to edit.</div>
+          )}
+        </>
       )}
     </div>
   );

@@ -89,7 +89,10 @@ export default function QueueNode({ id, data, selected }) {
   return (
     <div style={wrapperStyle}>
       <div className="data-structure-container" style={containerStyle}>
-        <div style={dragHandleStyle}>&#8942;</div>
+        <div style={{ ...dragHandleStyle, position: 'relative' }}>
+          <Handle type="source" position={Position.Left} id="drag-handle-left" style={{ left: '-8px', width: '16px', height: '16px', background: '#2c2c2c', border: '2px solid #f4f1ea' }} />
+          &#8942;
+        </div>
         {values.map((val, idx) => (
           <div key={idx} style={idx === values.length - 1 ? lastCellStyle : cellStyle}>
             <Handle type="target" position={Position.Top} id={`target-${idx}`} style={{ ...handleStyle, top: -4 }} />

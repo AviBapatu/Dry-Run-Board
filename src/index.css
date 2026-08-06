@@ -33,3 +33,20 @@ html, body, #root {
 .data-structure-container:hover {
   box-shadow: 3px 3px 0px #2c2c2c !important;
 }
+
+/* Increase hit area for node resizer edges and hide the visual line */
+.react-flow__resize-control.line {
+  border: none !important;
+}
+
+.react-flow__resize-control.line.left,
+.react-flow__resize-control.line.right {
+  width: 16px !important;
+}
+
+.react-flow__resize-control.line.top,
+.react-flow__resize-control.line.bottom {
+  height: 16px !important;
+}
+
+

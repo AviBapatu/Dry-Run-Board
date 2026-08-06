@@ -25,7 +25,7 @@ export default function MapNode({ id, data, selected }) {
     backgroundColor: '#f4f1ea',
     border: '2px solid #2c2c2c',
     borderRadius: '4px',
-    overflow: 'hidden',
+    overflow: 'visible',
   };
 
   const rowStyle = {
@@ -105,7 +105,10 @@ export default function MapNode({ id, data, selected }) {
   return (
     <div style={wrapperStyle}>
       <div className="data-structure-container" style={containerStyle}>
-        <div style={dragHandleStyle}>&#8943;</div>
+        <div style={{ ...dragHandleStyle, position: 'relative' }}>
+          <Handle type="source" position={Position.Top} id="drag-handle-top" style={{ top: '-8px', width: '16px', height: '16px', background: '#2c2c2c', border: '2px solid #f4f1ea' }} />
+          &#8943;
+        </div>
         {entries.map((entry, idx) => (
           <div key={idx} style={idx === entries.length - 1 ? lastRowStyle : rowStyle}>
             <Handle type="target" position={Position.Left} id={`target-${idx}`} style={{ ...handleStyle, left: -4 }} />

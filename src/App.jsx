@@ -123,6 +123,7 @@ export default function App() {
           zoomOnScroll={false}
           proOptions={{ hideAttribution: true }}
           multiSelectionKeyCode={['Control', 'Meta', 'Shift']}
+          connectionMode="loose"
           fitView
           fitViewOptions={{ maxZoom: 1.1, padding: 0.2 }}
         >
