@@ -6,9 +6,7 @@ export const ArrayNodeDataSchema = z.object({
 });
 
 export const MatrixNodeDataSchema = z.object({
-  rows: z.number(),
-  cols: z.number(),
-  values: z.array(z.array(z.number()))
+  grid: z.array(z.array(z.union([z.string(), z.number()])))
 });
 
 export const GraphNodeDataSchema = z.object({
@@ -28,27 +26,45 @@ export const TextNodeDataSchema = z.object({
 export const NodeSchema = z.discriminatedUnion('type', [
   z.object({
     id: z.string(),
-    type: z.literal('ArrayNode'),
+    type: z.literal('arrayNode'),
     position: z.object({ x: z.number(), y: z.number() }),
     data: ArrayNodeDataSchema
   }),
   z.object({
     id: z.string(),
-    type: z.literal('MatrixNode'),
+    type: z.literal('matrixNode'),
     position: z.object({ x: z.number(), y: z.number() }),
     data: MatrixNodeDataSchema
   }),
   z.object({
     id: z.string(),
-    type: z.literal('GraphNode'),
+    type: z.literal('graphNode'),
     position: z.object({ x: z.number(), y: z.number() }),
     data: GraphNodeDataSchema
   }),
   z.object({
     id: z.string(),
-    type: z.literal('TextNode'),
+    type: z.literal('textNode'),
     position: z.object({ x: z.number(), y: z.number() }),
     data: TextNodeDataSchema
+  }),
+  z.object({
+    id: z.string(),
+    type: z.literal('stackNode'),
+    position: z.object({ x: z.number(), y: z.number() }),
+    data: z.object({ values: z.array(z.number()) })
+  }),
+  z.object({
+    id: z.string(),
+    type: z.literal('queueNode'),
+    position: z.object({ x: z.number(), y: z.number() }),
+    data: z.object({ values: z.array(z.number()) })
+  }),
+  z.object({
+    id: z.string(),
+    type: z.literal('mapNode'),
+    position: z.object({ x: z.number(), y: z.number() }),
+    data: z.object({ entries: z.array(z.object({ key: z.string(), value: z.string() })) })
   })
 ]);
 

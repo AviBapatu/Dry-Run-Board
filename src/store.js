@@ -38,6 +38,14 @@ const useStore = create(
       past: [],
       future: [],
       clipboard: [],
+      groqApiKey: '',
+      isSettingsOpen: false,
+      isAIGenOpen: false,
+      
+      setGroqApiKey: (key) => set({ groqApiKey: key }),
+      toggleSettings: () => set((state) => ({ isSettingsOpen: !state.isSettingsOpen })),
+      openSettings: () => set({ isSettingsOpen: true }),
+      toggleAIGen: () => set((state) => ({ isAIGenOpen: !state.isAIGenOpen })),
       
       toggleTheme: () => set((state) => {
         const newTheme = state.theme === 'light' ? 'dark' : 'light';
@@ -122,6 +130,11 @@ const useStore = create(
       clearCanvas: () => {
         get().saveHistory();
         set({ nodes: [], edges: [] });
+      },
+
+      setCanvasState: (nodes, edges) => {
+        get().saveHistory();
+        set({ nodes, edges });
       },
   
   updateNodeData: (nodeId, dataUpdate) => {
@@ -321,7 +334,7 @@ const useStore = create(
     }),
     {
       name: 'dry-run-board-storage',
-      partialize: (state) => ({ nodes: state.nodes, edges: state.edges, theme: state.theme }),
+      partialize: (state) => ({ nodes: state.nodes, edges: state.edges, theme: state.theme, groqApiKey: state.groqApiKey }),
     }
   )
 );

@@ -13,6 +13,7 @@ import TextNode from './nodes/TextNode';
 import ControlPanel from './components/ControlPanel';
 import PropertiesPanel from './components/PropertiesPanel';
 import UpdatePanel from './components/UpdatePanel';
+import CodeInitializer from './components/CodeInitializer';
 import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
 
 // Define the custom node types outside the component to avoid re-renders
@@ -35,7 +36,9 @@ export default function App() {
   const selectNode = useStore((state) => state.selectNode);
   const { zoomIn, zoomOut, fitView, screenToFlowPosition } = useReactFlow();
   const theme = useStore((state) => state.theme);
-  const [isUpdatePanelOpen, setIsUpdatePanelOpen] = useState(false);
+  const isSettingsOpen = useStore((state) => state.isSettingsOpen);
+  const toggleSettings = useStore((state) => state.toggleSettings);
+  const isAIGenOpen = useStore((state) => state.isAIGenOpen);
 
   useEffect(() => {
     const trackMouse = (e) => {
@@ -48,9 +51,6 @@ export default function App() {
           e.preventDefault();
           if (e.key === '-') zoomOut();
           else zoomIn();
-        } else if (e.key === ',') {
-          e.preventDefault();
-          setIsUpdatePanelOpen(prev => !prev);
         } else if (e.key === '0') {
           e.preventDefault();
           fitView({ maxZoom: 1, padding: 0.2 });
@@ -66,6 +66,15 @@ export default function App() {
             pos = screenToFlowPosition({ x: window.lastMousePos.x, y: window.lastMousePos.y });
           }
           useStore.getState().pasteClipboard(pos);
+        } else if (e.key.toLowerCase() === 'i') {
+          e.preventDefault();
+          useStore.getState().toggleAIGen();
+        }
+      } else if (!e.ctrlKey && !e.metaKey && e.key.toLowerCase() === 'i') {
+        // Also allow 'i' without modifiers, as long as we're not focused on an input
+        if (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          useStore.getState().toggleAIGen();
         }
       }
     };
@@ -106,8 +115,9 @@ export default function App() {
           <Background variant="dots" color="var(--border-secondary)" gap={16} size={1.5} />
           <Controls style={{ boxShadow: '2px 2px 0px var(--shadow-primary)', border: '2px solid var(--border-primary)', borderRadius: '0', backgroundColor: 'var(--bg-primary)' }} />
           <ControlPanel />
+          {isAIGenOpen && <CodeInitializer />}
           <PropertiesPanel />
-          <UpdatePanel isOpen={isUpdatePanelOpen} onClose={() => setIsUpdatePanelOpen(false)} />
+          <UpdatePanel isOpen={isSettingsOpen} onClose={toggleSettings} />
       </ReactFlow>
     </div>
   );

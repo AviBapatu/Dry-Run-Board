@@ -12,6 +12,7 @@ export default function useKeyboardShortcuts() {
   const spawnMap = useStore((state) => state.spawnMap);
   const spawnText = useStore((state) => state.spawnText);
   const clearCanvas = useStore((state) => state.clearCanvas);
+  const toggleSettings = useStore((state) => state.toggleSettings);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -21,6 +22,13 @@ export default function useKeyboardShortcuts() {
         document.activeElement.tagName === 'TEXTAREA' ||
         document.activeElement.tagName === 'SELECT'
       ) {
+        return;
+      }
+
+      // Handle Ctrl+, or Cmd+, for Settings Modal
+      if ((e.ctrlKey || e.metaKey) && e.key === ',') {
+        e.preventDefault();
+        toggleSettings();
         return;
       }
 
@@ -66,5 +74,5 @@ export default function useKeyboardShortcuts() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [spawnArray, spawnMatrix, spawnNode, spawnStack, spawnQueue, spawnMap, spawnText, clearCanvas]);
+  }, [spawnArray, spawnMatrix, spawnNode, spawnStack, spawnQueue, spawnMap, spawnText, clearCanvas, toggleSettings]);
 }
