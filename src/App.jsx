@@ -33,7 +33,7 @@ export default function App() {
   const onEdgesChange = useStore((state) => state.onEdgesChange);
   const onConnect = useStore((state) => state.onConnect);
   const selectNode = useStore((state) => state.selectNode);
-  const { zoomIn, zoomOut, fitView } = useReactFlow();
+  const { zoomIn, zoomOut, fitView, screenToFlowPosition } = useReactFlow();
 
   useEffect(() => {
     const checkForUpdates = async () => {
@@ -80,6 +80,14 @@ export default function App() {
           e.preventDefault();
           if (e.shiftKey) useStore.getState().redo();
           else useStore.getState().undo();
+        } else if (e.key.toLowerCase() === 'c') {
+          useStore.getState().copySelected();
+        } else if (e.key.toLowerCase() === 'v') {
+          let pos = null;
+          if (window.lastMousePos) {
+            pos = screenToFlowPosition({ x: window.lastMousePos.x, y: window.lastMousePos.y });
+          }
+          useStore.getState().pasteClipboard(pos);
         }
       }
     };
@@ -112,6 +120,7 @@ export default function App() {
           panOnScroll={true}
           zoomOnScroll={false}
           proOptions={{ hideAttribution: true }}
+          multiSelectionKeyCode={['Control', 'Meta', 'Shift']}
           fitView
           fitViewOptions={{ maxZoom: 1.1, padding: 0.2 }}
         >

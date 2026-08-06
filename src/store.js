@@ -36,6 +36,7 @@ const useStore = create(
       edges: [],
       past: [],
       future: [],
+      clipboard: [],
       
       saveHistory: () => {
         set((state) => {
@@ -69,6 +70,45 @@ const useStore = create(
             nodes: next.nodes,
             edges: next.edges,
           };
+        });
+      },
+
+      copySelected: () => {
+        set((state) => {
+          const selectedNodes = state.nodes.filter(n => n.selected);
+          return { clipboard: JSON.parse(JSON.stringify(selectedNodes)) };
+        });
+      },
+
+      pasteClipboard: (canvasPos) => {
+        get().saveHistory();
+        set((state) => {
+          if (!state.clipboard || state.clipboard.length === 0) return state;
+          
+          let offsetX = 30;
+          let offsetY = 30;
+          
+          if (canvasPos) {
+            const firstNode = state.clipboard[0];
+            offsetX = canvasPos.x - firstNode.position.x;
+            offsetY = canvasPos.y - firstNode.position.y;
+          }
+
+          const newNodes = state.clipboard.map((node, index) => {
+            return {
+              ...JSON.parse(JSON.stringify(node)),
+              id: `${node.type}-${Date.now()}-${index}-${Math.floor(Math.random() * 1000)}`,
+              selected: true,
+              position: {
+                x: node.position.x + offsetX,
+                y: node.position.y + offsetY
+              }
+            };
+          });
+
+          const updatedNodes = state.nodes.map(n => ({ ...n, selected: false })).concat(newNodes);
+          
+          return { nodes: updatedNodes };
         });
       },
 
