@@ -1,0 +1,9 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "updater",
+  "description": "Updater capabilities",
+  "windows": ["*"],
+  "permissions": [
+    "updater:default"
+  ]
+}
