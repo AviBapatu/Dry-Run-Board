@@ -10,6 +10,7 @@ export default function ControlPanel() {
   const spawnStack = useStore((state) => state.spawnStack);
   const spawnQueue = useStore((state) => state.spawnQueue);
   const spawnMap = useStore((state) => state.spawnMap);
+  const spawnText = useStore((state) => state.spawnText);
   const clearCanvas = useStore((state) => state.clearCanvas);
 
   const getPos = () => window.lastMousePos ? screenToFlowPosition(window.lastMousePos) : undefined;
@@ -74,6 +75,7 @@ export default function ControlPanel() {
       <button style={buttonStyle} onClick={() => spawnMap([{key:'k',value:'v'}], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Map [M]</button>
       <button style={buttonStyle} onClick={() => spawnMatrix([['0','0','0'],['0','0','0'],['0','0','0']], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Matrix [X]</button>
       <button style={buttonStyle} onClick={() => spawnNode('0', getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Graph Node [G]</button>
+      <button style={buttonStyle} onClick={() => spawnText('', getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Text Note [T]</button>
       
       <div style={{ height: '1px', backgroundColor: '#dcd7ca', margin: '4px 0' }} />
       <button style={clearStyle} onClick={() => clearCanvas()} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e, '#d60000')} onMouseLeave={e => handleMouseup(e, '#d60000')}>Clear Canvas [⇧+ C]</button>

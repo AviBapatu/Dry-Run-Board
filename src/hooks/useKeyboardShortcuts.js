@@ -10,6 +10,7 @@ export default function useKeyboardShortcuts() {
   const spawnStack = useStore((state) => state.spawnStack);
   const spawnQueue = useStore((state) => state.spawnQueue);
   const spawnMap = useStore((state) => state.spawnMap);
+  const spawnText = useStore((state) => state.spawnText);
   const clearCanvas = useStore((state) => state.clearCanvas);
 
   useEffect(() => {
@@ -48,6 +49,9 @@ export default function useKeyboardShortcuts() {
         case 'g':
           spawnNode('0', position);
           break;
+        case 't':
+          spawnText('', position);
+          break;
         case 'c':
           if (e.shiftKey && !e.ctrlKey && !e.metaKey && !e.altKey) {
             clearCanvas();
@@ -62,5 +66,5 @@ export default function useKeyboardShortcuts() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [spawnArray, spawnMatrix, spawnNode, spawnStack, spawnQueue, spawnMap, clearCanvas]);
+  }, [spawnArray, spawnMatrix, spawnNode, spawnStack, spawnQueue, spawnMap, spawnText, clearCanvas]);
 }

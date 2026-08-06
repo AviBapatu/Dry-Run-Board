@@ -303,6 +303,14 @@ const useStore = create(
     const newNode = { id, type: 'mapNode', position, data: { entries } };
     set({ nodes: [...get().nodes, newNode] });
   },
+
+  spawnText: (text, pos) => {
+    get().saveHistory();
+    const id = `text-${Math.random().toString(36).substring(2, 11)}`;
+    const position = pos || { x: 100 + Math.floor(Math.random() * 50), y: 100 + Math.floor(Math.random() * 50) };
+    const newNode = { id, type: 'textNode', position, data: { text } };
+    set({ nodes: [...get().nodes, newNode] });
+  },
     }),
     {
       name: 'dry-run-board-storage',

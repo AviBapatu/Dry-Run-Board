@@ -12,6 +12,7 @@ import GraphNode from './nodes/GraphNode';
 import StackNode from './nodes/StackNode';
 import QueueNode from './nodes/QueueNode';
 import MapNode from './nodes/MapNode';
+import TextNode from './nodes/TextNode';
 import ControlPanel from './components/ControlPanel';
 import PropertiesPanel from './components/PropertiesPanel';
 import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
@@ -24,6 +25,7 @@ const nodeTypes = {
   stackNode: StackNode,
   queueNode: QueueNode,
   mapNode: MapNode,
+  textNode: TextNode,
 };
 
 export default function App() {
