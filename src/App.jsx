@@ -1,9 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ReactFlow, Background, Controls, useReactFlow } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { check } from '@tauri-apps/plugin-updater';
-import { ask } from '@tauri-apps/plugin-dialog';
-import { relaunch } from '@tauri-apps/plugin-process';
 
 import useStore from './store';
 import ArrayNode from './nodes/ArrayNode';
@@ -15,6 +12,7 @@ import MapNode from './nodes/MapNode';
 import TextNode from './nodes/TextNode';
 import ControlPanel from './components/ControlPanel';
 import PropertiesPanel from './components/PropertiesPanel';
+import UpdatePanel from './components/UpdatePanel';
 import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
 
 // Define the custom node types outside the component to avoid re-renders
@@ -36,33 +34,9 @@ export default function App() {
   const onConnect = useStore((state) => state.onConnect);
   const selectNode = useStore((state) => state.selectNode);
   const { zoomIn, zoomOut, fitView, screenToFlowPosition } = useReactFlow();
+  const [isUpdatePanelOpen, setIsUpdatePanelOpen] = useState(false);
 
-  useEffect(() => {
-    const checkForUpdates = async () => {
-      try {
-        const update = await check();
-        if (update) {
-          const yes = await ask(`Update to version ${update.version} is available!\n\nRelease notes: ${update.body}\n\nDo you want to install it?`, { 
-            title: 'Update Available', 
-            kind: 'info',
-            okLabel: 'Update',
-            cancelLabel: 'Cancel'
-          });
-          if (yes) {
-            await update.downloadAndInstall();
-            await relaunch();
-          }
-        }
-      } catch (e) {
-        console.error('Failed to check for updates:', e);
-      }
-    };
-    
-    // Only check for updates in Tauri environment (not web browser)
-    if (window.__TAURI_INTERNALS__) {
-      checkForUpdates();
-    }
-  }, []);
+
 
   useEffect(() => {
     const trackMouse = (e) => {
@@ -75,6 +49,9 @@ export default function App() {
           e.preventDefault();
           if (e.key === '-') zoomOut();
           else zoomIn();
+        } else if (e.key === ',') {
+          e.preventDefault();
+          setIsUpdatePanelOpen(prev => !prev);
         } else if (e.key === '0') {
           e.preventDefault();
           fitView({ maxZoom: 1, padding: 0.2 });
@@ -131,6 +108,7 @@ export default function App() {
           <Controls style={{ boxShadow: '2px 2px 0px #2c2c2c', border: '2px solid #2c2c2c', borderRadius: '0', backgroundColor: '#f4f1ea' }} />
           <ControlPanel />
           <PropertiesPanel />
+          <UpdatePanel isOpen={isUpdatePanelOpen} onClose={() => setIsUpdatePanelOpen(false)} />
       </ReactFlow>
     </div>
   );
