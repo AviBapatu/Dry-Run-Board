@@ -1,6 +1,7 @@
 import React from 'react';
 import { Handle, Position } from '@xyflow/react';
 import useStore from '../store';
+import BaseNodeWrapper from '../components/BaseNodeWrapper';
 
 export default function MatrixNode({ id, data, selected }) {
   const updateNodeData = useStore((state) => state.updateNodeData);
@@ -57,15 +58,6 @@ export default function MatrixNode({ id, data, selected }) {
     paddingTop: '2px', // Matches the grid top border
   };
 
-  const gridContainerStyle = {
-    display: 'inline-flex',
-    flexDirection: 'column',
-    backgroundColor: '#f4f1ea',
-    border: '2px solid #2c2c2c',
-    borderRadius: '4px',
-    overflow: 'visible',
-  };
-
   const rowStyle = {
     display: 'flex',
     flexDirection: 'row',
@@ -110,19 +102,6 @@ export default function MatrixNode({ id, data, selected }) {
     border: 'none',
   };
 
-  const dragHandleStyle = {
-    height: '16px',
-    backgroundColor: '#dcd7ca',
-    borderBottom: '1px solid #2c2c2c',
-    cursor: 'grab',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '14px',
-    color: '#666',
-    lineHeight: '10px',
-  };
-
   const colControlsStyle = {
     position: 'absolute',
     right: '-32px',
@@ -152,6 +131,19 @@ export default function MatrixNode({ id, data, selected }) {
   const currentRows = grid.length;
   const currentCols = grid[0]?.length || 1;
 
+  const customControls = (
+    <>
+      <div style={colControlsStyle}>
+        <button style={btnStyle} onClick={() => updateNodeStructure(id, { rows: currentRows, cols: currentCols + 1 })}>+</button>
+        <button style={btnStyle} onClick={() => updateNodeStructure(id, { rows: currentRows, cols: Math.max(1, currentCols - 1) })}>-</button>
+      </div>
+      <div style={rowControlsStyle}>
+        <button style={btnStyle} onClick={() => updateNodeStructure(id, { rows: currentRows + 1, cols: currentCols })}>+</button>
+        <button style={btnStyle} onClick={() => updateNodeStructure(id, { rows: Math.max(1, currentRows - 1), cols: currentCols })}>-</button>
+      </div>
+    </>
+  );
+
   return (
     <div style={outerContainerStyle}>
       {grid.length > 0 && (
@@ -173,11 +165,12 @@ export default function MatrixNode({ id, data, selected }) {
           ))}
         </div>
 
-        <div className="data-structure-container" style={gridContainerStyle}>
-          <div style={{ ...dragHandleStyle, position: 'relative' }}>
-            <Handle type="source" position={Position.Top} id="drag-handle-top" style={{ top: '-8px', width: '16px', height: '16px', background: '#2c2c2c', border: '2px solid #f4f1ea' }} />
-            &#8943;
-          </div>
+        <BaseNodeWrapper
+          id={id}
+          selected={selected}
+          dragHandlePosition="top"
+          controls={customControls}
+        >
           {grid.map((row, rIdx) => (
             <div key={rIdx} style={rIdx === grid.length - 1 ? lastRowStyle : rowStyle}>
               {row.map((val, cIdx) => (
@@ -205,20 +198,8 @@ export default function MatrixNode({ id, data, selected }) {
               ))}
             </div>
           ))}
-        </div>
+        </BaseNodeWrapper>
       </div>
-      {selected && (
-        <>
-          <div style={colControlsStyle}>
-            <button style={btnStyle} onClick={() => updateNodeStructure(id, { rows: currentRows, cols: currentCols + 1 })}>+</button>
-            <button style={btnStyle} onClick={() => updateNodeStructure(id, { rows: currentRows, cols: Math.max(1, currentCols - 1) })}>-</button>
-          </div>
-          <div style={rowControlsStyle}>
-            <button style={btnStyle} onClick={() => updateNodeStructure(id, { rows: currentRows + 1, cols: currentCols })}>+</button>
-            <button style={btnStyle} onClick={() => updateNodeStructure(id, { rows: Math.max(1, currentRows - 1), cols: currentCols })}>-</button>
-          </div>
-        </>
-      )}
     </div>
   );
 }
