@@ -34,9 +34,8 @@ export default function App() {
   const onConnect = useStore((state) => state.onConnect);
   const selectNode = useStore((state) => state.selectNode);
   const { zoomIn, zoomOut, fitView, screenToFlowPosition } = useReactFlow();
+  const theme = useStore((state) => state.theme);
   const [isUpdatePanelOpen, setIsUpdatePanelOpen] = useState(false);
-
-
 
   useEffect(() => {
     const trackMouse = (e) => {
@@ -86,7 +85,7 @@ export default function App() {
   };
 
   return (
-    <div style={{ width: '100vw', height: '100vh', backgroundColor: '#f4f1ea' }}>
+    <div style={{ width: '100vw', height: '100vh', backgroundColor: 'var(--bg-primary)' }}>
       <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -104,8 +103,8 @@ export default function App() {
           fitView
           fitViewOptions={{ maxZoom: 1.1, padding: 0.2 }}
         >
-          <Background variant="dots" color="#dcd7ca" gap={16} size={1.5} />
-          <Controls style={{ boxShadow: '2px 2px 0px #2c2c2c', border: '2px solid #2c2c2c', borderRadius: '0', backgroundColor: '#f4f1ea' }} />
+          <Background variant="dots" color="var(--border-secondary)" gap={16} size={1.5} />
+          <Controls style={{ boxShadow: '2px 2px 0px var(--shadow-primary)', border: '2px solid var(--border-primary)', borderRadius: '0', backgroundColor: 'var(--bg-primary)' }} />
           <ControlPanel />
           <PropertiesPanel />
           <UpdatePanel isOpen={isUpdatePanelOpen} onClose={() => setIsUpdatePanelOpen(false)} />

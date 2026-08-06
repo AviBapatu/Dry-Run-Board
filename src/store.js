@@ -32,12 +32,19 @@ const isOverlapping = (nodeA, nodeB) => {
 const useStore = create(
   persist(
     (set, get) => ({
+      theme: 'light',
       nodes: [],
       edges: [],
       past: [],
       future: [],
       clipboard: [],
       
+      toggleTheme: () => set((state) => {
+        const newTheme = state.theme === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        return { theme: newTheme };
+      }),
+
       saveHistory: () => {
         set((state) => {
           const newPast = [...state.past, { nodes: state.nodes, edges: state.edges }].slice(-50);
@@ -314,7 +321,7 @@ const useStore = create(
     }),
     {
       name: 'dry-run-board-storage',
-      partialize: (state) => ({ nodes: state.nodes, edges: state.edges }),
+      partialize: (state) => ({ nodes: state.nodes, edges: state.edges, theme: state.theme }),
     }
   )
 );
