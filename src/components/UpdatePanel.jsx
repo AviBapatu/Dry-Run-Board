@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { check } from '@tauri-apps/plugin-updater';
 import { relaunch } from '@tauri-apps/plugin-process';
 import { version } from '../../package.json';
+import useStore from '../store';
 
 export default function UpdatePanel({ isOpen, onClose }) {
+  const theme = useStore((state) => state.theme);
+  const toggleTheme = useStore((state) => state.toggleTheme);
   const [status, setStatus] = useState('idle'); // idle | checking | available | none | downloading | error
   const [updateInfo, setUpdateInfo] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
@@ -27,6 +30,52 @@ export default function UpdatePanel({ isOpen, onClose }) {
       setIsClosing(false);
       onClose();
     }, 200);
+  };
+
+  const handleToggleTheme = (e) => {
+    const x = e.clientX;
+    const y = e.clientY;
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    const isDark = theme === 'light';
+    const targetBg = isDark ? '#242424' : '#f4f1ea';
+
+    const overlay = document.createElement('div');
+    Object.assign(overlay.style, {
+      position: 'fixed',
+      top: '0',
+      left: '0',
+      width: '100vw',
+      height: '100vh',
+      zIndex: '99999',
+      pointerEvents: 'none',
+      backgroundColor: targetBg,
+      clipPath: `circle(0px at ${x}px ${y}px)`,
+    });
+    document.body.appendChild(overlay);
+
+    // Phase 1: Circle expands
+    const expandAnim = overlay.animate(
+      { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`] },
+      { duration: 450, easing: 'ease-in-out', fill: 'forwards' }
+    );
+
+    // Switch the real theme once the circle covers most of the screen
+    setTimeout(() => {
+      toggleTheme();
+    }, 300);
+
+    // Phase 2: Once expanded, fade out smoothly
+    expandAnim.onfinish = () => {
+      const fadeAnim = overlay.animate(
+        { opacity: [1, 0] },
+        { duration: 300, easing: 'ease-out', fill: 'forwards' }
+      );
+      fadeAnim.onfinish = () => overlay.remove();
+    };
   };
 
   useEffect(() => {
@@ -95,9 +144,9 @@ export default function UpdatePanel({ isOpen, onClose }) {
   };
 
   const panelStyle = {
-    backgroundColor: '#f4f1ea',
-    border: '2px solid #2c2c2c',
-    boxShadow: '4px 4px 0px #2c2c2c',
+    backgroundColor: 'var(--bg-primary)',
+    border: '2px solid var(--border-primary)',
+    boxShadow: '4px 4px 0px var(--shadow-primary)',
     borderRadius: '4px',
     padding: '24px',
     width: '400px',
@@ -105,28 +154,29 @@ export default function UpdatePanel({ isOpen, onClose }) {
     display: 'flex',
     flexDirection: 'column',
     gap: '16px',
-    color: '#2c2c2c',
+    color: 'var(--text-primary)',
     transform: isClosing ? 'translateY(20px) scale(0.95)' : 'translateY(0) scale(1)',
     opacity: isClosing ? 0 : 1,
     transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease-out',
   };
 
   const buttonStyle = {
-    backgroundColor: '#fff',
-    border: '2px solid #2c2c2c',
+    backgroundColor: 'var(--button-bg)',
+    color: 'var(--text-primary)',
+    border: '2px solid var(--border-primary)',
     borderRadius: '4px',
     padding: '8px 16px',
     cursor: 'pointer',
     fontWeight: 'bold',
-    boxShadow: '2px 2px 0px #2c2c2c',
+    boxShadow: '2px 2px 0px var(--shadow-primary)',
     transition: 'all 0.1s ease',
   };
 
   const primaryButtonStyle = {
     ...buttonStyle,
-    backgroundColor: isWeb ? '#999' : '#2c2c2c',
-    color: '#f4f1ea',
-    boxShadow: isWeb ? '2px 2px 0px #ccc' : '2px 2px 0px #dcd7ca',
+    backgroundColor: isWeb ? 'var(--button-disabled-bg)' : 'var(--border-primary)',
+    color: 'var(--bg-primary)',
+    boxShadow: isWeb ? '2px 2px 0px var(--border-secondary)' : '2px 2px 0px var(--bg-tertiary)',
     cursor: isWeb ? 'not-allowed' : 'pointer',
     opacity: isWeb ? 0.7 : 1,
   };
@@ -134,9 +184,41 @@ export default function UpdatePanel({ isOpen, onClose }) {
   return (
     <div style={overlayStyle} onClick={handleClose}>
       <div style={panelStyle} onClick={(e) => e.stopPropagation()}>
-        <h2 style={{ margin: 0, fontSize: '20px', borderBottom: '2px solid #2c2c2c', paddingBottom: '8px' }}>
-          Settings & Updates
-        </h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid var(--border-primary)', paddingBottom: '8px' }}>
+          <h2 style={{ margin: 0, fontSize: '20px' }}>
+            Settings & Updates
+          </h2>
+          <button 
+            style={{ 
+              backgroundColor: 'var(--bg-primary)', 
+              color: 'var(--text-primary)',
+              border: '2px solid var(--border-primary)',
+              padding: '4px 10px', 
+              fontSize: '12px',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              boxShadow: '2px 2px 0px var(--shadow-primary)',
+              borderRadius: '0'
+            }} 
+            onClick={handleToggleTheme}
+            onMouseDown={(e) => {
+              e.currentTarget.style.transform = 'translate(2px, 2px)';
+              e.currentTarget.style.boxShadow = '0px 0px 0px var(--border-primary)';
+            }}
+            onMouseUp={(e) => {
+              e.currentTarget.style.transform = 'translate(0px, 0px)';
+              e.currentTarget.style.boxShadow = '2px 2px 0px var(--shadow-primary)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translate(0px, 0px)';
+              e.currentTarget.style.boxShadow = '2px 2px 0px var(--shadow-primary)';
+            }}
+          >
+            {theme === 'light' ? 'THEME: DARK' : 'THEME: LIGHT'}
+          </button>
+        </div>
         
         <div style={{ fontSize: '14px', lineHeight: '1.5' }}>
           {isWeb && (
