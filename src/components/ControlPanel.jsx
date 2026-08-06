@@ -21,44 +21,44 @@ export default function ControlPanel() {
     top: '20px',
     left: '20px',
     zIndex: 10,
-    backgroundColor: '#f4f1ea',
-    border: '2px solid #2c2c2c',
+    backgroundColor: 'var(--bg-primary)',
+    border: '2px solid var(--border-primary)',
     padding: '16px',
     display: 'flex',
     flexDirection: 'column',
     gap: isCollapsed ? '0px' : '12px',
-    boxShadow: '4px 4px 0px #2c2c2c',
+    boxShadow: '4px 4px 0px var(--shadow-primary)',
     borderRadius: '0', 
   };
 
   const buttonStyle = {
-    backgroundColor: '#f4f1ea',
-    border: '2px solid #2c2c2c',
+    backgroundColor: 'var(--bg-primary)',
+    border: '2px solid var(--border-primary)',
     padding: '8px 16px',
     fontSize: '14px',
     fontWeight: 'bold',
-    color: '#2c2c2c',
+    color: 'var(--text-primary)',
     cursor: 'pointer',
     textAlign: 'center',
     borderRadius: '0', 
-    boxShadow: '2px 2px 0px #2c2c2c',
+    boxShadow: '2px 2px 0px var(--shadow-primary)',
     transition: 'transform 0.1s, box-shadow 0.1s',
   };
 
   const clearStyle = {
     ...buttonStyle,
-    backgroundColor: '#ffdbdb',
-    color: '#d60000',
-    borderColor: '#d60000',
-    boxShadow: '2px 2px 0px #d60000',
+    backgroundColor: 'var(--error-bg)',
+    color: 'var(--error-text)',
+    borderColor: 'var(--error-border)',
+    boxShadow: '2px 2px 0px var(--error-border)',
   };
 
   const handleMousedown = (e) => {
     e.currentTarget.style.transform = 'translate(2px, 2px)';
-    e.currentTarget.style.boxShadow = '0px 0px 0px ' + (e.currentTarget.style.borderColor || '#2c2c2c');
+    e.currentTarget.style.boxShadow = '0px 0px 0px ' + (e.currentTarget.style.borderColor || 'var(--border-primary)');
   };
   
-  const handleMouseup = (e, color = '#2c2c2c') => {
+  const handleMouseup = (e, color = 'var(--shadow-primary)') => {
     e.currentTarget.style.transform = 'translate(0px, 0px)';
     e.currentTarget.style.boxShadow = '2px 2px 0px ' + color;
   };
@@ -66,12 +66,12 @@ export default function ControlPanel() {
   return (
     <div style={panelStyle}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h3 style={{ margin: 0, fontSize: '18px', color: '#2c2c2c', textTransform: 'uppercase', letterSpacing: '1px', paddingRight: '16px' }}>
+        <h3 style={{ margin: 0, fontSize: '18px', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '1px', paddingRight: '16px' }}>
           Dry Run Tools
         </h3>
         <button 
           onClick={() => setIsCollapsed(!isCollapsed)}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', fontWeight: 'bold', color: '#2c2c2c', padding: '0 4px' }}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', fontWeight: 'bold', color: 'var(--text-primary)', padding: '0 4px' }}
         >
           {isCollapsed ? '+' : '−'}
         </button>
@@ -79,7 +79,7 @@ export default function ControlPanel() {
       
       {!isCollapsed && (
         <>
-          <div style={{ height: '1px', backgroundColor: '#dcd7ca', marginTop: '4px', marginBottom: '8px' }} />
+          <div style={{ height: '1px', backgroundColor: 'var(--border-secondary)', marginTop: '4px', marginBottom: '8px' }} />
           
           <button style={buttonStyle} onClick={() => spawnArray(['0','0','0','0'], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Array [A]</button>
           <button style={buttonStyle} onClick={() => spawnStack(['0','0','0','0'], getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Stack [S]</button>
@@ -89,8 +89,8 @@ export default function ControlPanel() {
           <button style={buttonStyle} onClick={() => spawnNode('0', getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Graph Node [G]</button>
           <button style={buttonStyle} onClick={() => spawnText('', getPos())} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e)} onMouseLeave={e => handleMouseup(e)}>Text Note [T]</button>
           
-          <div style={{ height: '1px', backgroundColor: '#dcd7ca', margin: '4px 0' }} />
-          <button style={clearStyle} onClick={() => clearCanvas()} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e, '#d60000')} onMouseLeave={e => handleMouseup(e, '#d60000')}>Clear Canvas [⇧+ C]</button>
+          <div style={{ height: '1px', backgroundColor: 'var(--border-secondary)', margin: '4px 0' }} />
+          <button style={clearStyle} onClick={() => clearCanvas()} onMouseDown={handleMousedown} onMouseUp={e => handleMouseup(e, 'var(--error-border)')} onMouseLeave={e => handleMouseup(e, 'var(--error-border)')}>Clear Canvas [⇧+ C]</button>
         </>
       )}
     </div>

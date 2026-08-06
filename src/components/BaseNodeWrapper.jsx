@@ -21,8 +21,8 @@ export default function BaseNodeWrapper({
   const containerStyle = {
     display: 'flex',
     flexDirection: isLeft ? 'row' : 'column',
-    backgroundColor: '#f4f1ea',
-    border: '2px solid #2c2c2c',
+    backgroundColor: 'var(--bg-primary)',
+    border: '2px solid var(--border-primary)',
     borderRadius: '4px',
     overflow: 'visible',
     position: 'relative',
@@ -33,24 +33,24 @@ export default function BaseNodeWrapper({
   };
 
   const dragHandleStyle = {
-    backgroundColor: '#dcd7ca',
+    backgroundColor: 'var(--bg-tertiary)',
     cursor: 'grab',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: '14px',
-    color: '#666',
+    color: 'var(--text-primary)',
     flexShrink: 0,
     position: 'relative',
     ...(isLeft 
-      ? { width: '16px', borderRight: '1px solid #2c2c2c', borderBottom: 'none' } 
-      : { height: '16px', borderBottom: '1px solid #2c2c2c', borderRight: 'none', lineHeight: '10px' }
+      ? { width: '16px', borderRight: '1px solid var(--border-primary)', borderBottom: 'none' } 
+      : { height: '16px', borderBottom: '1px solid var(--border-primary)', borderRight: 'none', lineHeight: '10px' }
     ),
   };
 
   const handleDotStyle = {
-    background: '#2c2c2c',
-    border: '2px solid #f4f1ea',
+    background: 'var(--handle-bg)',
+    border: '2px solid var(--handle-border)',
     width: '16px',
     height: '16px',
   };
@@ -66,24 +66,24 @@ export default function BaseNodeWrapper({
   };
 
   const btnStyle = {
-    backgroundColor: '#f4f1ea', border: '2px solid #2c2c2c', color: '#2c2c2c', cursor: 'pointer',
+    backgroundColor: 'var(--button-bg)', border: '2px solid var(--border-primary)', color: 'var(--text-primary)', cursor: 'pointer',
     fontWeight: 'bold', width: '22px', height: '22px', display: 'flex', alignItems: 'center',
-    justifyContent: 'center', fontSize: '14px', boxShadow: '2px 2px 0px #2c2c2c', padding: 0,
+    justifyContent: 'center', fontSize: '14px', boxShadow: '2px 2px 0px var(--shadow-primary)', padding: 0,
   };
 
   return (
     <>
       {showResizer && (
         <NodeResizer
-          color="#2c2c2c"
+          color="var(--border-primary)"
           isVisible={selected}
           minWidth={resizerMinWidth}
           minHeight={resizerMinHeight}
           handleStyle={{
             width: 14,
             height: 14,
-            border: '2px solid #2c2c2c',
-            background: '#f4f1ea',
+            border: '2px solid var(--border-primary)',
+            background: 'var(--bg-primary)',
             borderRadius: '2px',
           }}
         />
