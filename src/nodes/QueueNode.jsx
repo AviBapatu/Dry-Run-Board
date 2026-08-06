@@ -20,7 +20,7 @@ export default function QueueNode({ id, data, selected }) {
     alignItems: 'center',
     justifyContent: 'center',
     padding: '8px 12px',
-    borderRight: '1px dashed #dcd7ca',
+    borderRight: '1px dashed var(--border-secondary)',
     minWidth: '40px',
   };
 
@@ -32,7 +32,7 @@ export default function QueueNode({ id, data, selected }) {
   const inputStyle = {
     fontSize: '16px',
     fontWeight: 'bold',
-    color: '#2c2c2c',
+    color: 'var(--text-primary)',
     background: 'transparent',
     border: 'none',
     textAlign: 'center',
@@ -41,7 +41,7 @@ export default function QueueNode({ id, data, selected }) {
   };
 
   const handleStyle = {
-    background: '#2c2c2c',
+    background: 'var(--handle-bg)',
     border: 'none',
     width: '8px',
     height: '8px',
@@ -54,10 +54,6 @@ export default function QueueNode({ id, data, selected }) {
       dragHandlePosition="left"
       onAdd={() => updateNodeStructure(id, { length: values.length + 1 })}
       onRemove={() => updateNodeStructure(id, { length: Math.max(1, values.length - 1) })}
-      containerStyleOverrides={{
-        borderLeft: 'none',
-        borderRight: 'none',
-      }}
     >
       {values.map((val, idx) => (
         <div key={idx} style={idx === values.length - 1 ? lastCellStyle : cellStyle}>

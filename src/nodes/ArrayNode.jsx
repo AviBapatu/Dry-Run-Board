@@ -21,7 +21,7 @@ export default function ArrayNode({ id, data, selected }) {
     alignItems: 'center',
     justifyContent: 'center',
     padding: '8px 12px',
-    borderRight: '1px solid #dcd7ca',
+    borderRight: '1px solid var(--border-secondary)',
     minWidth: '40px',
   };
 
@@ -32,7 +32,7 @@ export default function ArrayNode({ id, data, selected }) {
 
   const indexStyle = {
     fontSize: '10px',
-    color: '#2c2c2c',
+    color: 'var(--text-primary)',
     opacity: 0.7,
     marginBottom: '4px',
   };
@@ -40,7 +40,7 @@ export default function ArrayNode({ id, data, selected }) {
   const inputStyle = {
     fontSize: '16px',
     fontWeight: 'bold',
-    color: '#2c2c2c',
+    color: 'var(--text-primary)',
     background: 'transparent',
     border: 'none',
     textAlign: 'center',

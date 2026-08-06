@@ -42,8 +42,8 @@ export default function GraphNode({ id, data }) {
     justifyContent: 'center',
     width: '60px',
     height: '60px',
-    backgroundColor: '#f4f1ea',
-    border: '2px solid #2c2c2c',
+    backgroundColor: 'var(--bg-primary)',
+    border: '2px solid var(--border-primary)',
     borderRadius: '50%',
     position: 'relative',
   };
@@ -51,7 +51,7 @@ export default function GraphNode({ id, data }) {
   const inputStyle = {
     fontSize: '18px',
     fontWeight: 'bold',
-    color: '#2c2c2c',
+    color: 'var(--text-primary)',
     background: 'transparent',
     border: 'none',
     textAlign: 'center',
@@ -60,7 +60,7 @@ export default function GraphNode({ id, data }) {
   };
 
   const handleStyle = {
-    background: '#2c2c2c',
+    background: 'var(--handle-bg)',
     border: 'none',
     width: '8px',
     height: '8px',

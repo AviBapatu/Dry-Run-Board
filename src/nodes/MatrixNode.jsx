@@ -32,7 +32,8 @@ export default function MatrixNode({ id, data, selected }) {
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: '11px',
-    color: '#666',
+    color: 'var(--text-primary)',
+    opacity: 0.6,
     border: 'none',
   };
 
@@ -61,7 +62,7 @@ export default function MatrixNode({ id, data, selected }) {
   const rowStyle = {
     display: 'flex',
     flexDirection: 'row',
-    borderBottom: '1px solid #dcd7ca',
+    borderBottom: '1px solid var(--border-secondary)',
   };
 
   const lastRowStyle = {
@@ -76,7 +77,7 @@ export default function MatrixNode({ id, data, selected }) {
     justifyContent: 'center',
     width: '64px',
     height: '64px',
-    borderRight: '1px solid #dcd7ca',
+    borderRight: '1px solid var(--border-secondary)',
   };
 
   const lastCellStyle = {
@@ -87,7 +88,7 @@ export default function MatrixNode({ id, data, selected }) {
   const inputStyle = {
     fontSize: '16px',
     fontWeight: 'bold',
-    color: '#2c2c2c',
+    color: 'var(--text-primary)',
     background: 'transparent',
     border: 'none',
     textAlign: 'center',
@@ -123,9 +124,9 @@ export default function MatrixNode({ id, data, selected }) {
   };
 
   const btnStyle = {
-    backgroundColor: '#f4f1ea', border: '2px solid #2c2c2c', color: '#2c2c2c', cursor: 'pointer',
+    backgroundColor: 'var(--button-bg)', border: '2px solid var(--border-primary)', color: 'var(--text-primary)', cursor: 'pointer',
     fontWeight: 'bold', width: '22px', height: '22px', display: 'flex', alignItems: 'center',
-    justifyContent: 'center', fontSize: '14px', boxShadow: '2px 2px 0px #2c2c2c', padding: 0,
+    justifyContent: 'center', fontSize: '14px', boxShadow: '2px 2px 0px var(--shadow-primary)', padding: 0,
   };
 
   const currentRows = grid.length;

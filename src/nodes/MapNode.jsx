@@ -24,7 +24,7 @@ export default function MapNode({ id, data, selected }) {
     position: 'relative',
     display: 'flex',
     flexDirection: 'row',
-    borderBottom: '1px solid #dcd7ca',
+    borderBottom: '1px solid var(--border-secondary)',
   };
 
   const lastRowStyle = {
@@ -41,14 +41,14 @@ export default function MapNode({ id, data, selected }) {
 
   const keyCellStyle = {
     ...cellStyle,
-    borderRight: '2px solid #2c2c2c',
-    backgroundColor: '#eaddc8',
+    borderRight: '2px solid var(--border-primary)',
+    backgroundColor: 'var(--bg-secondary)',
   };
 
   const inputStyle = {
     fontSize: '16px',
     fontWeight: 'bold',
-    color: '#2c2c2c',
+    color: 'var(--text-primary)',
     background: 'transparent',
     border: 'none',
     textAlign: 'center',
@@ -57,7 +57,7 @@ export default function MapNode({ id, data, selected }) {
   };
 
   const handleStyle = {
-    background: '#2c2c2c',
+    background: 'var(--handle-bg)',
     border: 'none',
     width: '8px',
     height: '8px',

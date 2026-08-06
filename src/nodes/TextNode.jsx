@@ -26,7 +26,7 @@ export default function TextNode({ id, data, selected }) {
     fontSize: '14px',
     fontFamily: 'inherit',
     lineHeight: '1.5',
-    color: '#2c2c2c',
+    color: 'var(--text-primary)',
     background: 'transparent',
     border: 'none',
     resize: 'none',
@@ -36,14 +36,14 @@ export default function TextNode({ id, data, selected }) {
     boxSizing: 'border-box',
     cursor: isEditing ? 'text' : 'grab',
     pointerEvents: isEditing ? 'auto' : 'none',
-    caretColor: isEditing ? '#2c2c2c' : 'transparent',
+    caretColor: isEditing ? 'var(--text-primary)' : 'transparent',
   };
 
   const handleDotStyle = {
     width: '16px',
     height: '16px',
-    background: '#2c2c2c',
-    border: '2px solid #f4f1ea',
+    background: 'var(--handle-bg)',
+    border: '2px solid var(--handle-border)',
   };
 
   const customHandles = (
