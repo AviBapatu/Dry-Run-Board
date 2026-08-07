@@ -4,6 +4,8 @@
   "description": "Updater capabilities",
   "windows": ["*"],
   "permissions": [
-    "updater:default"
+    "updater:default",
+    "process:default",
+    "dialog:default"
   ]
 }
