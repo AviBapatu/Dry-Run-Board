@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/nicholasking/taurschema/master/tauri.schema.json",
   "productName": "Dry Run Board",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "identifier": "com.dryrunboard.app",
   "build": {
     "frontendDist": "../dist",
