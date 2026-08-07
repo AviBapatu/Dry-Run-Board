@@ -27,6 +27,8 @@ jobs:
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
 
       - name: Cache Rust dependencies
         uses: Swatinem/rust-cache@v2
@@ -41,6 +43,13 @@ jobs:
 
       - name: Install frontend dependencies
         run: npm ci
+
+      - name: Run frontend linter
+        run: npm run lint
+
+      - name: Run Rust clippy
+        working-directory: src-tauri
+        run: cargo clippy -- -D warnings
 
       - name: Build and Publish Tauri app
         uses: tauri-apps/tauri-action@v0
